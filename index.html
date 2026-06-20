@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards - Lançamentos de Operações Mercantis</title>
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(180deg,#063b82,#0b5ed7);
+    color:#111;
+}
+.container{
+    max-width:520px;
+    margin:auto;
+    min-height:100vh;
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+}
+.topo{
+    background:#002b5c;
+    color:white;
+    border-radius:18px;
+    padding:18px 14px;
+    text-align:center;
+    box-shadow:0 8px 18px rgba(0,0,0,.25);
+}
+.topo h1{
+    margin:0;
+    font-size:24px;
+}
+.topo p{
+    margin:8px 0 0;
+    font-size:15px;
+    opacity:.95;
+}
+.progresso{
+    margin:14px 0;
+    background:white;
+    border-radius:999px;
+    height:16px;
+    overflow:hidden;
+    box-shadow:0 5px 12px rgba(0,0,0,.18);
+}
+.barra{
+    height:100%;
+    width:0%;
+    background:#ffd54f;
+    transition:.3s;
+}
+.info{
+    color:white;
+    text-align:center;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+.card-area{
+    perspective:1200px;
+    flex:1;
+    display:flex;
+    align-items:center;
+}
+.flashcard{
+    width:100%;
+    min-height:520px;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .7s;
+    cursor:pointer;
+}
+.flashcard.virado{
+    transform:rotateY(180deg);
+}
+.face{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    border-radius:22px;
+    padding:22px;
+    overflow:auto;
+    box-shadow:0 12px 28px rgba(0,0,0,.30);
+}
+.frente{
+    background:#fff3f7;
+    border:4px solid #ffb3c7;
+}
+.verso{
+    background:#e6f2ff;
+    border:4px solid #88bfff;
+    transform:rotateY(180deg);
+}
+.tag{
+    display:inline-block;
+    background:#002b5c;
+    color:white;
+    padding:7px 12px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+h2{
+    margin:8px 0 16px;
+    color:#003b8f;
+    font-size:25px;
+    line-height:1.15;
+}
+h3{
+    margin:14px 0 8px;
+    color:#003b8f;
+    font-size:19px;
+}
+p,li{
+    font-size:18px;
+    line-height:1.45;
+}
+ul{
+    padding-left:22px;
+}
+.lancamento{
+    background:white;
+    border-left:7px solid #0b5ed7;
+    border-radius:14px;
+    padding:12px;
+    margin:10px 0;
+}
+.debito{
+    color:#0b5ed7;
+    font-weight:bold;
+}
+.credito{
+    color:#b00020;
+    font-weight:bold;
+}
+.dica{
+    background:#fff8d6;
+    border-left:7px solid #ffca28;
+    padding:12px;
+    border-radius:14px;
+    margin-top:12px;
+    font-size:17px;
+}
+.controles{
+    display:flex;
+    gap:10px;
+    margin-top:14px;
+}
+button{
+    flex:1;
+    border:0;
+    padding:15px 10px;
+    border-radius:16px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 5px 12px rgba(0,0,0,.2);
+}
+.btn{
+    background:#ffd54f;
+    color:#111;
+}
+.btn2{
+    background:white;
+    color:#003b8f;
+}
+.rodape{
+    color:white;
+    text-align:center;
+    font-size:13px;
+    margin-top:12px;
+    opacity:.9;
+}
+@media(max-width:380px){
+    .flashcard{min-height:560px}
+    h2{font-size:22px}
+    p,li{font-size:17px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="topo">
+        <h1>📚 Professor Moreira</h1>
+        <p>Flashcards Mobile — Lançamentos de Operações Mercantis</p>
+    </div>
+
+    <div class="progresso"><div class="barra" id="barra"></div></div>
+    <div class="info" id="info"></div>
+
+    <div class="card-area">
+        <div class="flashcard" id="card" onclick="virar()">
+            <div class="face frente" id="frente"></div>
+            <div class="face verso" id="verso"></div>
+        </div>
+    </div>
+
+    <div class="controles">
+        <button class="btn2" onclick="voltar(event)">⬅️ Voltar</button>
+        <button class="btn" onclick="proximo(event)">Avançar ➡️</button>
+        <button class="btn2" onclick="reiniciar(event)">🔄 Reiniciar</button>
+    </div>
+
+    <div class="rodape">Toque no cartão para virar</div>
+</div>
+
+<script>
+const cards = [
+{
+titulo:"Despesa de cartório paga à vista",
+frente:"A empresa pagou despesa de cartório referente a contrato de aluguel. Qual é o lançamento contábil?",
+verso:`
+<div class="lancamento"><span class="debito">D — Despesas com Cartório</span></div>
+<div class="lancamento"><span class="credito">C — Caixa</span></div>
+<div class="dica">Como houve pagamento imediato, sai dinheiro do Caixa. A despesa é reconhecida no resultado.</div>`
+},
+{
+titulo:"Compra de mercadorias para revenda a prazo",
+frente:"A empresa comprou mercadorias para revenda conforme nota fiscal, com pagamento a prazo. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Estoque de Mercadorias para Revenda</span></div>
+<div class="lancamento"><span class="credito">C — Fornecedores Nacionais</span></div>
+<div class="dica">Mercadorias para revenda entram no ativo como estoque. Como ficou a prazo, nasce uma obrigação com fornecedores.</div>`
+},
+{
+titulo:"Manutenção elétrica e hidráulica paga à vista",
+frente:"A empresa pagou manutenção elétrica e hidráulica das instalações. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Manutenção e Reparos de Instalações</span></div>
+<div class="lancamento"><span class="credito">C — Caixa</span></div>
+<div class="dica">Manutenção comum é despesa do período. Como foi paga, o Caixa diminui.</div>`
+},
+{
+titulo:"Aquisição de mesas a prazo",
+frente:"A empresa adquiriu mesas tipo diretor para uso próprio, com pagamento a prazo. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Móveis e Utensílios</span></div>
+<div class="lancamento"><span class="credito">C — Contas a Pagar</span></div>
+<div class="dica">Móveis usados na empresa são imobilizado. Como não houve pagamento imediato, registra-se Contas a Pagar.</div>`
+},
+{
+titulo:"Aquisição de cadeiras executivas a prazo",
+frente:"A empresa adquiriu cadeiras modelo executivo para uso na empresa, a prazo. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Móveis e Utensílios</span></div>
+<div class="lancamento"><span class="credito">C — Contas a Pagar</span></div>
+<div class="dica">Cadeiras utilizadas nas atividades da empresa são classificadas no ativo imobilizado.</div>`
+},
+{
+titulo:"Aquisição de armários a prazo",
+frente:"A empresa comprou armários altos, gaveteiro e balcão para uso próprio. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Móveis e Utensílios</span></div>
+<div class="lancamento"><span class="credito">C — Contas a Pagar</span></div>
+<div class="dica">O bem permanece na empresa e gera benefício por vários períodos, por isso é imobilizado.</div>`
+},
+{
+titulo:"Aquisição de notebooks a prazo",
+frente:"A empresa adquiriu notebooks para uso nas atividades administrativas, a prazo. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Computadores e Periféricos</span></div>
+<div class="lancamento"><span class="credito">C — Contas a Pagar</span></div>
+<div class="dica">Computadores e notebooks usados pela empresa são ativo imobilizado.</div>`
+},
+{
+titulo:"Aquisição de desktop all-in-one a prazo",
+frente:"A empresa adquiriu um desktop all-in-one para uso próprio, a prazo. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Computadores e Periféricos</span></div>
+<div class="lancamento"><span class="credito">C — Contas a Pagar</span></div>
+<div class="dica">A conta debitada representa o bem adquirido. A conta creditada representa a obrigação futura.</div>`
+},
+{
+titulo:"Aquisição de mesa com gaveteiro a prazo",
+frente:"A empresa comprou uma mesa com gaveteiro anexo para uso próprio. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Móveis e Utensílios</span></div>
+<div class="lancamento"><span class="credito">C — Contas a Pagar</span></div>
+<div class="dica">O bem é utilizado na estrutura da empresa, por isso não é despesa imediata.</div>`
+},
+{
+titulo:"Aquisição de cadeira secretária a prazo",
+frente:"A empresa adquiriu uma cadeira tipo secretária para uso próprio, a prazo. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Móveis e Utensílios</span></div>
+<div class="lancamento"><span class="credito">C — Contas a Pagar</span></div>
+<div class="dica">Móveis e utensílios aumentam no débito; contas a pagar aumenta no crédito.</div>`
+},
+{
+titulo:"Central telefônica paga à vista",
+frente:"A empresa pagou a aquisição de central telefônica com ramais. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Equipamentos de Telefonia</span></div>
+<div class="lancamento"><span class="credito">C — Caixa</span></div>
+<div class="dica">Equipamento usado pela empresa é ativo imobilizado. Como foi pago, reduz o Caixa.</div>`
+},
+{
+titulo:"Venda de mercadorias à vista",
+frente:"A empresa vendeu mercadorias à vista. Qual é o lançamento da receita?",
+verso:`
+<div class="lancamento"><span class="debito">D — Caixa</span></div>
+<div class="lancamento"><span class="credito">C — Receita de Revenda de Mercadorias</span></div>
+<div class="dica">Venda à vista aumenta o Caixa e reconhece receita no resultado.</div>`
+},
+{
+titulo:"Baixa do estoque na venda à vista",
+frente:"Após a venda à vista, como registrar o custo das mercadorias vendidas?",
+verso:`
+<div class="lancamento"><span class="debito">D — Custo das Mercadorias Vendidas</span></div>
+<div class="lancamento"><span class="credito">C — Estoque de Mercadorias para Revenda</span></div>
+<div class="dica">Na venda de mercadorias, há dois registros: receita da venda e baixa do estoque pelo custo.</div>`
+},
+{
+titulo:"Venda de mercadorias a prazo",
+frente:"A empresa vendeu mercadorias a prazo para clientes. Qual é o lançamento da receita?",
+verso:`
+<div class="lancamento"><span class="debito">D — Clientes</span></div>
+<div class="lancamento"><span class="credito">C — Receita de Revenda de Mercadorias</span></div>
+<div class="dica">Venda a prazo gera direito a receber de clientes e reconhece receita.</div>`
+},
+{
+titulo:"Baixa do estoque na venda a prazo",
+frente:"Após a venda a prazo, como registrar o custo das mercadorias vendidas?",
+verso:`
+<div class="lancamento"><span class="debito">D — Custo das Mercadorias Vendidas</span></div>
+<div class="lancamento"><span class="credito">C — Estoque de Mercadorias para Revenda</span></div>
+<div class="dica">O estoque diminui pelo custo da mercadoria vendida, não pelo valor da venda.</div>`
+},
+{
+titulo:"Pagamento a fornecedor",
+frente:"A empresa pagou parte de uma compra realizada anteriormente com fornecedor. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Fornecedores Nacionais</span></div>
+<div class="lancamento"><span class="credito">C — Caixa</span></div>
+<div class="dica">Ao pagar fornecedor, a obrigação diminui no débito e o Caixa diminui no crédito.</div>`
+},
+{
+titulo:"Nova venda de mercadorias à vista",
+frente:"A empresa recebeu à vista por mercadorias vendidas. Qual é o lançamento da receita?",
+verso:`
+<div class="lancamento"><span class="debito">D — Caixa</span></div>
+<div class="lancamento"><span class="credito">C — Receita de Revenda de Mercadorias</span></div>
+<div class="dica">Entrada de dinheiro: débito em Caixa. Receita: crédito em Receita de Revenda.</div>`
+},
+{
+titulo:"CMV da nova venda à vista",
+frente:"Como registrar o custo das mercadorias vendidas na venda à vista?",
+verso:`
+<div class="lancamento"><span class="debito">D — Custo das Mercadorias Vendidas</span></div>
+<div class="lancamento"><span class="credito">C — Estoque de Mercadorias para Revenda</span></div>
+<div class="dica">O CMV é despesa/custo do resultado e o estoque é baixado.</div>`
+},
+{
+titulo:"Nova venda de mercadorias a prazo",
+frente:"A empresa vendeu mercadorias a prazo. Qual é o lançamento da receita?",
+verso:`
+<div class="lancamento"><span class="debito">D — Clientes</span></div>
+<div class="lancamento"><span class="credito">C — Receita de Revenda de Mercadorias</span></div>
+<div class="dica">Clientes representa um direito da empresa contra o comprador.</div>`
+},
+{
+titulo:"CMV da nova venda a prazo",
+frente:"Como registrar o custo das mercadorias vendidas na venda a prazo?",
+verso:`
+<div class="lancamento"><span class="debito">D — Custo das Mercadorias Vendidas</span></div>
+<div class="lancamento"><span class="credito">C — Estoque de Mercadorias para Revenda</span></div>
+<div class="dica">Mesmo que a venda seja a prazo, o estoque deve ser baixado no momento da venda.</div>`
+},
+{
+titulo:"Conta de energia elétrica a pagar",
+frente:"A empresa recebeu fatura de energia elétrica para pagamento posterior. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Energia Elétrica</span></div>
+<div class="lancamento"><span class="credito">C — Contas a Pagar</span></div>
+<div class="dica">A despesa é reconhecida pelo regime de competência, mesmo antes do pagamento.</div>`
+},
+{
+titulo:"Conta de água e esgoto a pagar",
+frente:"A empresa recebeu fatura de água e esgoto para pagamento posterior. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Água e Esgoto</span></div>
+<div class="lancamento"><span class="credito">C — Contas a Pagar</span></div>
+<div class="dica">Despesa incorrida aumenta no débito; obrigação a pagar aumenta no crédito.</div>`
+},
+{
+titulo:"Conta de telefonia e internet a pagar",
+frente:"A empresa recebeu fatura de telefonia e internet para pagamento posterior. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Telefonia e Internet</span></div>
+<div class="lancamento"><span class="credito">C — Contas a Pagar</span></div>
+<div class="dica">Quando a fatura é reconhecida, registra-se a despesa e a obrigação.</div>`
+},
+{
+titulo:"Aluguel do mês a pagar",
+frente:"A empresa reconheceu aluguel das instalações referente ao mês. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Aluguel de Imóveis</span></div>
+<div class="lancamento"><span class="credito">C — Contas a Pagar</span></div>
+<div class="dica">Aluguel do mês é despesa do período, mesmo que ainda não tenha sido pago.</div>`
+},
+{
+titulo:"Pró-labore do sócio 1",
+frente:"A empresa reconheceu pró-labore do sócio 1 referente ao mês. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Pró-Labore</span></div>
+<div class="lancamento"><span class="credito">C — Pró-Labore a Pagar</span></div>
+<div class="dica">O pró-labore é despesa da empresa e gera obrigação com o sócio.</div>`
+},
+{
+titulo:"Pró-labore do sócio 2",
+frente:"A empresa reconheceu pró-labore do sócio 2 referente ao mês. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Pró-Labore</span></div>
+<div class="lancamento"><span class="credito">C — Pró-Labore a Pagar</span></div>
+<div class="dica">Mesmo lançamento do sócio 1: despesa no débito e obrigação no crédito.</div>`
+},
+{
+titulo:"INSS sobre pró-labore",
+frente:"A empresa reconheceu INSS sobre pró-labore do mês. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Despesa com INSS</span></div>
+<div class="lancamento"><span class="credito">C — INSS a Pagar</span></div>
+<div class="dica">Encargo social reconhecido como despesa e obrigação a recolher.</div>`
+},
+{
+titulo:"Depreciação de móveis e utensílios",
+frente:"A empresa reconheceu depreciação de móveis e utensílios. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Depreciação</span></div>
+<div class="lancamento"><span class="credito">C — (-) Depreciação Acumulada de Móveis e Utensílios</span></div>
+<div class="dica">Depreciação é despesa. A depreciação acumulada é conta redutora do ativo imobilizado.</div>`
+},
+{
+titulo:"Depreciação de computadores e periféricos",
+frente:"A empresa reconheceu depreciação de computadores e periféricos. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Depreciação</span></div>
+<div class="lancamento"><span class="credito">C — (-) Depreciação Acumulada de Computadores e Periféricos</span></div>
+<div class="dica">Não se credita diretamente o bem. Credita-se a depreciação acumulada.</div>`
+},
+{
+titulo:"Depreciação de equipamentos de telefonia",
+frente:"A empresa reconheceu depreciação de equipamentos de telefonia. Qual é o lançamento?",
+verso:`
+<div class="lancamento"><span class="debito">D — Depreciação</span></div>
+<div class="lancamento"><span class="credito">C — (-) Depreciação Acumulada de Equipamentos de Telefonia</span></div>
+<div class="dica">O ativo continua registrado pelo custo, e a depreciação acumulada reduz seu valor contábil.</div>`
+}
+];
+
+let atual = 0;
+
+function render(){
+    const c = cards[atual];
+    document.getElementById("card").classList.remove("virado");
+    document.getElementById("frente").innerHTML = `
+        <span class="tag">Cartão ${atual+1} de ${cards.length}</span>
+        <h2>${c.titulo}</h2>
+        <p>${c.frente}</p>
+        <div class="dica">👉 Toque no cartão para ver o lançamento.</div>
+    `;
+    document.getElementById("verso").innerHTML = `
+        <span class="tag">Resposta comentada</span>
+        <h2>${c.titulo}</h2>
+        ${c.verso}
+    `;
+    document.getElementById("info").innerText = `${atual+1} / ${cards.length}`;
+    document.getElementById("barra").style.width = ((atual+1)/cards.length*100)+"%";
+}
+
+function virar(){
+    document.getElementById("card").classList.toggle("virado");
+}
+function proximo(e){
+    e.stopPropagation();
+    if(atual < cards.length-1){ atual++; render(); }
+}
+function voltar(e){
+    e.stopPropagation();
+    if(atual > 0){ atual--; render(); }
+}
+function reiniciar(e){
+    e.stopPropagation();
+    atual = 0;
+    render();
+}
+
+render();
+</script>
+</body>
+</html>
