@@ -3,207 +3,229 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flashcards - Lançamentos de Operações Mercantis</title>
+<title>FLASHCARDS - Lançamentos de Operações Mercantis</title>
+
 <style>
-*{box-sizing:border-box}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
 body{
-    margin:0;
-    font-family:Arial, Helvetica, sans-serif;
-    background:linear-gradient(180deg,#063b82,#0b5ed7);
-    color:#111;
+  background:#f2f5fa;
+  min-height:100vh;
+  padding:15px;
+  display:flex;
+  justify-content:center;
 }
+
 .container{
-    max-width:520px;
-    margin:auto;
-    min-height:100vh;
-    padding:16px;
-    display:flex;
-    flex-direction:column;
+  width:100%;
+  max-width:720px;
 }
+
 .topo{
-    background:#002b5c;
-    color:white;
-    border-radius:18px;
-    padding:18px 14px;
-    text-align:center;
-    box-shadow:0 8px 18px rgba(0,0,0,.25);
+  background:#003b8f;
+  color:white;
+  padding:18px;
+  border-radius:18px;
+  text-align:center;
+  margin-bottom:15px;
+  box-shadow:0 6px 16px rgba(0,0,0,.20);
 }
+
 .topo h1{
-    margin:0;
-    font-size:24px;
+  font-size:30px;
+  letter-spacing:.5px;
 }
+
 .topo p{
-    margin:8px 0 0;
-    font-size:15px;
-    opacity:.95;
+  font-size:18px;
+  margin-top:6px;
+  font-weight:bold;
 }
-.progresso{
-    margin:14px 0;
-    background:white;
-    border-radius:999px;
-    height:16px;
-    overflow:hidden;
-    box-shadow:0 5px 12px rgba(0,0,0,.18);
-}
-.barra{
-    height:100%;
-    width:0%;
-    background:#ffd54f;
-    transition:.3s;
-}
-.info{
-    color:white;
-    text-align:center;
-    font-weight:bold;
-    margin-bottom:10px;
-}
+
 .card-area{
-    perspective:1200px;
-    flex:1;
-    display:flex;
-    align-items:center;
+  perspective:1200px;
 }
-.flashcard{
-    width:100%;
-    min-height:520px;
-    position:relative;
-    transform-style:preserve-3d;
-    transition:transform .7s;
-    cursor:pointer;
+
+.card{
+  width:100%;
+  min-height:320px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform .7s;
+  cursor:pointer;
 }
-.flashcard.virado{
-    transform:rotateY(180deg);
+
+.card.virado{
+  transform:rotateY(180deg);
 }
+
 .face{
-    position:absolute;
-    inset:0;
-    backface-visibility:hidden;
-    border-radius:22px;
-    padding:22px;
-    overflow:auto;
-    box-shadow:0 12px 28px rgba(0,0,0,.30);
+  position:absolute;
+  width:100%;
+  min-height:320px;
+  border-radius:20px;
+  padding:24px;
+  text-align:center;
+  backface-visibility:hidden;
+  box-shadow:0 6px 18px rgba(0,0,0,.18);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  overflow:auto;
 }
+
 .frente{
-    background:#fff3f7;
-    border:4px solid #ffb3c7;
+  background:#b3e5fc;
+  color:#000;
+  border:4px solid #81d4fa;
 }
+
 .verso{
-    background:#e6f2ff;
-    border:4px solid #88bfff;
-    transform:rotateY(180deg);
+  background:#f8bbd0;
+  color:#000;
+  border:4px solid #f48fb1;
+  transform:rotateY(180deg);
 }
+
 .tag{
-    display:inline-block;
-    background:#002b5c;
-    color:white;
-    padding:7px 12px;
-    border-radius:999px;
-    font-size:14px;
-    font-weight:bold;
-    margin-bottom:12px;
+  display:inline-block;
+  align-self:center;
+  background:#003b8f;
+  color:white;
+  padding:7px 13px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:12px;
 }
+
 h2{
-    margin:8px 0 16px;
-    color:#003b8f;
-    font-size:25px;
-    line-height:1.15;
+  color:#003b8f;
+  font-size:24px;
+  margin-bottom:14px;
+  line-height:1.2;
 }
-h3{
-    margin:14px 0 8px;
-    color:#003b8f;
-    font-size:19px;
+
+p{
+  font-size:21px;
+  line-height:1.4;
+  font-weight:bold;
 }
-p,li{
-    font-size:18px;
-    line-height:1.45;
-}
-ul{
-    padding-left:22px;
-}
+
 .lancamento{
-    background:white;
-    border-left:7px solid #0b5ed7;
-    border-radius:14px;
-    padding:12px;
-    margin:10px 0;
+  background:white;
+  border-radius:14px;
+  padding:12px;
+  margin:9px 0;
+  text-align:left;
+  border-left:7px solid #003b8f;
+  font-size:19px;
 }
+
 .debito{
-    color:#0b5ed7;
-    font-weight:bold;
+  color:#003b8f;
+  font-weight:bold;
 }
+
 .credito{
-    color:#b00020;
-    font-weight:bold;
+  color:#b00020;
+  font-weight:bold;
 }
+
 .dica{
-    background:#fff8d6;
-    border-left:7px solid #ffca28;
-    padding:12px;
-    border-radius:14px;
-    margin-top:12px;
-    font-size:17px;
+  margin-top:12px;
+  background:#fff8d6;
+  border-left:7px solid #ffca28;
+  border-radius:14px;
+  padding:12px;
+  font-size:17px;
+  line-height:1.35;
+  text-align:left;
+  color:#111;
 }
+
+.contador{
+  text-align:center;
+  margin-top:14px;
+  font-size:18px;
+  font-weight:bold;
+  color:#003b8f;
+}
+
 .controles{
-    display:flex;
-    gap:10px;
-    margin-top:14px;
+  display:flex;
+  gap:10px;
+  margin-top:18px;
 }
+
 button{
-    flex:1;
-    border:0;
-    padding:15px 10px;
-    border-radius:16px;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
-    box-shadow:0 5px 12px rgba(0,0,0,.2);
+  flex:1;
+  padding:15px 8px;
+  border:none;
+  border-radius:15px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  background:#003b8f;
+  color:white;
+  box-shadow:0 5px 13px rgba(0,0,0,.18);
 }
-.btn{
-    background:#ffd54f;
-    color:#111;
+
+button:active{
+  transform:scale(.98);
 }
-.btn2{
-    background:white;
-    color:#003b8f;
-}
+
 .rodape{
-    color:white;
-    text-align:center;
-    font-size:13px;
-    margin-top:12px;
-    opacity:.9;
+  text-align:center;
+  margin-top:14px;
+  color:#003b8f;
+  font-weight:bold;
 }
-@media(max-width:380px){
-    .flashcard{min-height:560px}
-    h2{font-size:22px}
-    p,li{font-size:17px}
+
+@media(max-width:430px){
+  body{padding:10px}
+  .topo h1{font-size:26px}
+  .topo p{font-size:16px}
+  .card,.face{min-height:380px}
+  h2{font-size:22px}
+  p{font-size:19px}
+  .lancamento{font-size:17px}
+  button{font-size:16px}
 }
 </style>
 </head>
+
 <body>
+
 <div class="container">
-    <div class="topo">
-        <h1>📚 Professor Moreira</h1>
-        <p>Flashcards Mobile — Lançamentos de Operações Mercantis</p>
+
+  <div class="topo">
+    <h1>📚 FLASHCARDS</h1>
+    <p>Lançamentos de Operações Mercantis</p>
+  </div>
+
+  <div class="card-area">
+    <div class="card" id="card" onclick="virarCard()">
+      <div class="face frente" id="frente"></div>
+      <div class="face verso" id="verso"></div>
     </div>
+  </div>
 
-    <div class="progresso"><div class="barra" id="barra"></div></div>
-    <div class="info" id="info"></div>
+  <div class="contador" id="contador"></div>
 
-    <div class="card-area">
-        <div class="flashcard" id="card" onclick="virar()">
-            <div class="face frente" id="frente"></div>
-            <div class="face verso" id="verso"></div>
-        </div>
-    </div>
+  <div class="controles">
+    <button onclick="anterior(event)">⬅️ Voltar</button>
+    <button onclick="reiniciar(event)">🔄 Reiniciar</button>
+    <button onclick="proximo(event)">➡️ Avançar</button>
+  </div>
 
-    <div class="controles">
-        <button class="btn2" onclick="voltar(event)">⬅️ Voltar</button>
-        <button class="btn" onclick="proximo(event)">Avançar ➡️</button>
-        <button class="btn2" onclick="reiniciar(event)">🔄 Reiniciar</button>
-    </div>
+  <div class="rodape">Toque no cartão para virar</div>
 
-    <div class="rodape">Toque no cartão para virar</div>
 </div>
 
 <script>
@@ -452,42 +474,56 @@ verso:`
 
 let atual = 0;
 
-function render(){
-    const c = cards[atual];
-    document.getElementById("card").classList.remove("virado");
-    document.getElementById("frente").innerHTML = `
-        <span class="tag">Cartão ${atual+1} de ${cards.length}</span>
-        <h2>${c.titulo}</h2>
-        <p>${c.frente}</p>
-        <div class="dica">👉 Toque no cartão para ver o lançamento.</div>
-    `;
-    document.getElementById("verso").innerHTML = `
-        <span class="tag">Resposta comentada</span>
-        <h2>${c.titulo}</h2>
-        ${c.verso}
-    `;
-    document.getElementById("info").innerText = `${atual+1} / ${cards.length}`;
-    document.getElementById("barra").style.width = ((atual+1)/cards.length*100)+"%";
+function carregar(){
+  const c = cards[atual];
+
+  document.getElementById("card").classList.remove("virado");
+
+  document.getElementById("frente").innerHTML = `
+    <span class="tag">Cartão ${atual+1} de ${cards.length}</span>
+    <h2>${c.titulo}</h2>
+    <p>${c.frente}</p>
+    <div class="dica">👉 Toque no cartão para ver a resposta.</div>
+  `;
+
+  document.getElementById("verso").innerHTML = `
+    <span class="tag">Resposta comentada</span>
+    <h2>${c.titulo}</h2>
+    ${c.verso}
+  `;
+
+  document.getElementById("contador").innerHTML =
+    `Cartão ${atual+1} de ${cards.length}`;
 }
 
-function virar(){
-    document.getElementById("card").classList.toggle("virado");
+function virarCard(){
+  document.getElementById("card").classList.toggle("virado");
 }
+
 function proximo(e){
-    e.stopPropagation();
-    if(atual < cards.length-1){ atual++; render(); }
-}
-function voltar(e){
-    e.stopPropagation();
-    if(atual > 0){ atual--; render(); }
-}
-function reiniciar(e){
-    e.stopPropagation();
-    atual = 0;
-    render();
+  e.stopPropagation();
+  if(atual < cards.length - 1){
+    atual++;
+    carregar();
+  }
 }
 
-render();
+function anterior(e){
+  e.stopPropagation();
+  if(atual > 0){
+    atual--;
+    carregar();
+  }
+}
+
+function reiniciar(e){
+  e.stopPropagation();
+  atual = 0;
+  carregar();
+}
+
+carregar();
 </script>
+
 </body>
 </html>
